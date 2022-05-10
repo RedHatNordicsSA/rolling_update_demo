@@ -8,6 +8,5 @@
     ansible.builtin.debug:
       var: ansible_facts
   
-  - include_role:
-      name: ansible_azure_vm
-
+  #- include_role:
+  #    name: ansible_azure_vm

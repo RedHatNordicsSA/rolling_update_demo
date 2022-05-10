@@ -4,9 +4,6 @@
   vars:
 
   tasks:
-  - name: Print all available facts
-    ansible.builtin.debug:
-      var: ansible_facts
-  
-  #- include_role:
-  #    name: ansible_azure_vm
+  - name: Include role azure_vm
+    ansible.builtin.include_role:
+      name: azure_vm

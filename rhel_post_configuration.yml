@@ -1,0 +1,53 @@
+- name: Post configuration of RHEL machines in the cloud
+  hosts: all
+  become: true
+  vars:
+    rhsm_username: '{{ lookup("env", "rhsm_username") }}'
+    rhsm_password: '{{ lookup("env", "rhsm_password") }}'
+    rhsm_repositories:
+      - rhel-8-for-x86_64-appstream-rpms
+      - rhel-8-for-x86_64-baseos-rpms
+    pkg_update: true
+  collections:
+    - redhatinsights.insights
+
+  tasks:
+  - name: "Ensure system is register to Red Hat Subscription Management and auto-subscribed to available content"
+    community.general.redhat_subscription:
+      state: present
+      username: "{{ rhsm_username }}"
+      password: "{{ rhsm_password }}"
+      auto_attach: true
+
+  - name: "Ensure sure only listed RHSM repositories are enabled"
+    community.general.rhsm_repository:
+      name: "{{ rhsm_repositories }}"
+      purge: true
+
+  - ansible.builtin.include_role: 
+      name: insights_client
+    when: ansible_os_family == 'RedHat'
+
+  #- include_role: 
+  #    name: compliance
+  #  when: ansible_os_family == 'RedHat'
+
+  - name: "Ensure the system is up to date"
+    ansible.builtin.package:
+      name: "*"
+      state: latest
+    register: host_updated
+    when:
+      - pkg_update|default(False)
+
+  - name: "Ensure system is rebooted after package update - {{ inventory_hostname }}"
+    ansible.builtin.reboot:
+      reboot_timeout: 0
+    ignore_errors: true
+    when:
+      - host_updated.changed
+
+  - name: "Wait for server to come back"
+    wait_for_connection:
+      delay: 15
+      timeout: 300

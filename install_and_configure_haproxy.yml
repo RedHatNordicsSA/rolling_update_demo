@@ -12,7 +12,7 @@
 
   - name: "Append backend servers to haproxy_backend_servers var"
     ansible.builtin.set_fact:
-      haproxy_backend_servers: "{{ haproxy_backend_servers + [ { 'name': item, 'address': hostvars[item]['ansible_host'] + ':' + app_server_listening_port } ] }}"
+      haproxy_backend_servers: "{{ haproxy_backend_servers + [ { 'name': item, 'address': hostvars[item]['ansible_host'] + ':' + app_server_listening_port|string } ] }}"
     loop: "{{ query('inventory_hostnames', 'frontend') }}"
 
   - name: "Print value of the haproxy_backend_servers variable"

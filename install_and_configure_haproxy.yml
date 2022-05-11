@@ -1,0 +1,23 @@
+- name: Install and configure HAProxy
+  hosts: haproxy
+  become: true
+  vars:
+
+  tasks:
+  - name: "Initialize an empty list for HAProxy backend configuration directives"
+    ansible.builtin.set_fact:
+      haproxy_backend_servers: []
+
+  - name: "Append backend servers to haproxy_backend_servers var"
+    ansible.builtin.set_fact:
+      haproxy_backend_servers: "{{ haproxy_backend_servers + [ { 'name': item, 'address': hostvars[item]['ansible_default_ipv4']['address'] } ] }}"
+    loop: "{{ query('inventory_hostnames', 'frontend') }}"
+
+  - name: "Print value of the haproxy_backend_servers variable"
+    ansible.builtin.debug:
+      var: haproxy_backend_servers
+      verbosity: 2
+
+  - name: Include role haproxy
+    ansible.builtin.include_role:
+      name: haproxy

@@ -1,2 +1,3 @@
 - name: azure_vm
   src: https://github.com/RedHatNordicsSA/ansible_role_azure_vm.git
+- name: geerlingguy.haproxy

@@ -19,7 +19,7 @@
       password: "{{ rhsm_password }}"
       auto_attach: true
 
-  - name: "Ensure sure only listed RHSM repositories are enabled"
+  - name: "Ensure only listed RHSM repositories are enabled"
     community.general.rhsm_repository:
       name: "{{ rhsm_repositories }}"
       purge: true
@@ -38,7 +38,7 @@
       state: latest
     register: host_updated
     when:
-      - pkg_update|default(False)
+      - pkg_update|default(false)
 
   - name: "Ensure system is rebooted after package update - {{ inventory_hostname }}"
     ansible.builtin.reboot:

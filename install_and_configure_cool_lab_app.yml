@@ -1,0 +1,9 @@
+- name: Install and configure the cool lab app
+  hosts: frontend
+  become: true
+  vars:
+
+  tasks:
+  - name: Include role cool_lab_app
+    ansible.builtin.include_role:
+      name: cool_lab_app

@@ -1,5 +1,5 @@
-- name: azure_vm
-  src: https://github.com/RedHatNordicsSA/ansible_role_azure_vm.git
+- name: azure_rg
+  src: https://github.com/RedHatNordicsSA/ansible_role_azure_rg.git
 - name: azure_vm
   src: https://github.com/RedHatNordicsSA/ansible_role_azure_vm.git
 - name: cool_lab_app

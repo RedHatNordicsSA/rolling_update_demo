@@ -4,6 +4,6 @@
   vars:
 
   tasks:
-  - name: Include role azure_rm
+  - name: Include role azure_rg
     ansible.builtin.include_role:
-      name: azure_rm
+      name: azure_rg

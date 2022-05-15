@@ -1,0 +1,9 @@
+- name: Create resource group in Azure Cloud
+  hosts: localhost
+  connection: local
+  vars:
+
+  tasks:
+  - name: Include role azure_rm
+    ansible.builtin.include_role:
+      name: azure_rm

@@ -1,0 +1,37 @@
+---
+# This playbook does a rolling update for all servers serially (one at a time).
+# Change the value of serial: to adjust the number of server to be updated.
+#
+#
+- hosts: frontend
+  become: true
+  serial: 1
+  tasks:
+  - name: "Ensure {{ inventory_hostname }} is disabled in HAProxy"
+    haproxy:
+      state: disabled 
+      backend: app 
+      host: "{{ inventory_hostname }}" 
+      socket: /var/lib/haproxy/stats
+    delegate_to: "{{ item }}"
+    with_items: "{{ query('inventory_hostnames', 'haproxy') }}"
+
+  - name: Include role cool_lab_app
+    include_role:
+      name: cool_lab_app
+
+  - name: "Ensure cool lab app responds after update."
+    wait_for:
+      host: "{{ inventory_hostname }}"
+      port: "{{ cool_lab_app_port }}"
+      state: started 
+      timeout: 80
+
+  - name: "Ensure {{ inventory_hostname }} is enabled in HAProxy."
+    haproxy:
+      state: enabled
+      backend: app 
+      host: "{{ inventory_hostname }}" 
+      socket: /var/lib/haproxy/stats
+    delegate_to: "{{ item }}"
+    with_items: "{{ query('inventory_hostnames', 'haproxy') }}"

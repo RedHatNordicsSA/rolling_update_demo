@@ -4,4 +4,5 @@
   src: https://github.com/RedHatNordicsSA/ansible_role_azure_vm.git
 - name: cool_lab_app
   src: https://github.com/RedHatNordicsSA/ansible_role_cool_lab_app.git
-- name: geerlingguy.haproxy
+- name: haproxy
+  src: https://github.com/RedHatNordicsSA/ansible_role_haproxy.git

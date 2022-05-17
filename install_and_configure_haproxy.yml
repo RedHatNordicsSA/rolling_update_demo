@@ -22,4 +22,4 @@
 
   - name: Include role haproxy
     ansible.builtin.include_role:
-      name: geerlingguy.haproxy
+      name: haproxy

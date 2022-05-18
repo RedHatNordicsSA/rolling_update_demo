@@ -1,0 +1,10 @@
+- name: Print public IP of the HAProxy host
+  hosts: haproxy
+  become: true
+  vars:
+
+  tasks:
+  - name: Print the IP for the HAProxy host
+    ansible.builtin.debug:
+      msg: "The Cool Lab App can be reached at: {{ ansible_host }}"
+    

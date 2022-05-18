@@ -8,30 +8,30 @@
   serial: 1
   tasks:
   - name: "Ensure {{ inventory_hostname }} is disabled in HAProxy"
-    haproxy:
-      state: disabled 
-      backend: app 
-      host: "{{ inventory_hostname }}" 
+    ansible.builtin.haproxy:
+      state: disabled
+      backend: habackend
+      host: "{{ inventory_hostname }}"
       socket: /var/lib/haproxy/stats
     delegate_to: "{{ item }}"
     with_items: "{{ query('inventory_hostnames', 'haproxy') }}"
 
   - name: Include role cool_lab_app
-    include_role:
+    ansible.builtin.include_role:
       name: cool_lab_app
 
   - name: "Ensure cool lab app responds after update."
-    wait_for:
-      host: "{{ inventory_hostname }}"
+    ansible.builtin.wait_for:
+      host: "{{ ansible_host }}"
       port: "{{ cool_lab_app_port }}"
-      state: started 
+      state: started
       timeout: 80
 
   - name: "Ensure {{ inventory_hostname }} is enabled in HAProxy."
-    haproxy:
+    ansible.builtin.haproxy:
       state: enabled
-      backend: app 
-      host: "{{ inventory_hostname }}" 
+      backend: habackend
+      host: "{{ inventory_hostname }}"
       socket: /var/lib/haproxy/stats
     delegate_to: "{{ item }}"
     with_items: "{{ query('inventory_hostnames', 'haproxy') }}"
